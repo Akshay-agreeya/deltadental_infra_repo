@@ -1,1 +1,1 @@
-variable "server_dbs" {}
+variable "servers_dbs" {}
