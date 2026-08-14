@@ -1,0 +1,15 @@
+# Terraform — never commit state or variable files containing secrets
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+**/.terraform/
+
+# Environment variable files
+.env
+.env.local
+.env.*.local
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

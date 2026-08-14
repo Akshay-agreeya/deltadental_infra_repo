@@ -14,9 +14,10 @@ module "aks" {
 }
 
 module "database" {
-  depends_on  = [module.acr]
-  source      = "../../modules/azurerm_Database"
-  servers_dbs = var.servers_dbs
+  depends_on        = [module.acr]
+  source            = "../../modules/azurerm_Database"
+  servers_dbs       = var.servers_dbs
+  db_admin_password = var.db_admin_password
 }
 
 

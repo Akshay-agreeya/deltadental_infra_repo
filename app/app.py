@@ -9,19 +9,26 @@ connection_string = os.environ.get('CONNECTION_STRING')
 
 # Check if the connection string is available
 if connection_string:
-    print(f"Connection String: {connection_string}")
+    print("Connection string loaded: OK")
 else:
     print("Connection string not found in environment variables.")
     
 app = FastAPI()
 
-# Configure CORSMiddleware to allow all origins (disable CORS for development)
+# Configure CORSMiddleware with an explicit allowlist of trusted origins.
+# Set the ALLOWED_ORIGINS environment variable to a comma-separated list of
+# frontend URLs (e.g. "https://app.example.com,https://admin.example.com").
+# Falling back to an empty list causes all cross-origin requests to be blocked,
+# which is safe. Do NOT use ["*"] together with allow_credentials=True.
+_raw_origins = os.environ.get("ALLOWED_ORIGINS", "")
+allowed_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # This allows all origins (use '*' for development only)
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 

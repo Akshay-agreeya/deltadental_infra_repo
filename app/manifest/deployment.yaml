@@ -12,13 +12,27 @@ spec:
       labels:
         app: add-task-v4
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: add-ui
         image: devtodoacrwestus.azurecr.io/microtodo-ui:v1
         # image: devtodoacrwestus.azurecr.io/todo-ui:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
         env:
           - name: CONNECTION_STRING
-            value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:devtododbsrvwuswus1.database.windows.net,1433;Database=todoappdb;Uid=devopsadmin;Pwd=P@ssw01rd@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+            valueFrom:
+              secretKeyRef:
+                name: db-connection
+                key: connection-string
         ports:
         - containerPort: 80 # Changed from 8000 to 80 to match Nginx
 
@@ -38,11 +52,25 @@ spec:
       labels:
         app: microtodo-add-v1
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: micro-ui
         image: devtodoacrwestus.azurecr.io/microtodo-ui:v1
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
         env:
           - name: CONNECTION_STRING
-            value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:devtododbsrvwuswus1.database.windows.net,1433;Database=todoappdb;Uid=devopsadmin;Pwd=P@ssw01rd@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+            valueFrom:
+              secretKeyRef:
+                name: db-connection
+                key: connection-string
         ports:
         - containerPort: 8080 # Changed from 8080 to 80 to match Nginx
