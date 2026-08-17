@@ -106,7 +106,6 @@ Produce a single Markdown report:
 
 ### Logs (redacted)
 - `<timestamp>` `<service>` `<level>` `<message>`
-- `<timestamp>` `<service>` `<level>` `<message>`
 
 ### Suspected cause (hypothesis)
 - <1–2 bullets. Clearly label as hypothesis.>
@@ -128,5 +127,5 @@ Produce a single Markdown report:
 - Be explicit about uncertainty. If data is missing, write
   "Unknown (data unavailable)" and list what's needed.
 - Use inclusive language (allowlist/denylist).
-- Use short, scannable bullets. Avoid hype and anthropomorphizing.
+- Use short, scannable bullets. Avoid hype.
 - Redact secrets and personal data.

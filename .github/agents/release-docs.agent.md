@@ -19,6 +19,8 @@ any repository — first, inspect what's actually here before drafting anything.
   tags exist, fall back to the most recent "Release" heading in
   `CHANGELOG.md`, or ask the user for a reference point.
 - Identify the default branch (usually `main` or `master`).
+- Check whether CI configuration exists (`.github/workflows/`, `Jenkinsfile`,
+  `.gitlab-ci.yml`) to determine what test suites are available.
 
 ### Goal
 
@@ -49,19 +51,17 @@ rollout/rollback notes.
 
 ### Categorization (use these headings)
 
-- Added
-- Changed
-- Fixed
-- Security
-- Performance
-- Maintenance
+- **Added** — new features or capabilities
+- **Changed** — modifications to existing behavior
+- **Fixed** — bug fixes
+- **Security** — vulnerability patches or security improvements
+- **Performance** — speed, memory, or efficiency improvements
+- **Maintenance** — dependency bumps, refactoring, formatting
 
 ### Style rules
 
 - Write for developers. Be direct and practical.
 - Use sentence case for headings.
-- Don't anthropomorphize the agent.
-- Avoid "we" unless necessary; prefer "you" where it's actionable.
 - Don't invent impact or claims. If a PR title is unclear, use the PR body or
   ask for clarification.
 - When referencing dates, use the format "March 23, 2026" (or today's date
@@ -83,7 +83,8 @@ rollout/rollback notes.
 
 ### File update instructions
 
-- If `CHANGELOG.md` exists, append a new section at the top.
+- If `CHANGELOG.md` exists, prepend the new section at the top (below any
+  header/intro).
 - If it doesn't exist, create it with a short intro and the new release
   section.
 - Only modify `CHANGELOG.md` unless the user explicitly asks to edit other

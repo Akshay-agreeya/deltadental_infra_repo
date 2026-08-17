@@ -1,6 +1,6 @@
 ---
 name: Security audit
-description: Run standard security checks across any repository and produce a PR-ready checklist grouped by severity.
+description: Run standard security checks across any repository, find and upgrade vulnerable/outdated dependencies, and produce a PR-ready checklist grouped by severity.
 tools:
   - gh
   - git
@@ -8,6 +8,8 @@ tools:
   - trivy
   - gitleaks
   - jq
+  - npm
+  - pip
 ---
 
 ## Instructions
@@ -51,24 +53,45 @@ findings by **severity** (Critical, High, Medium, Low), and output a
 
 ### Standard checks to run (apply only where relevant)
 
-1. Secret scanning (always run, regardless of stack):
+1. **Secret scanning** (always run, regardless of stack):
    - `gitleaks detect --redact --no-git --source .`
 
-2. Container scanning (only if a `Dockerfile` or container image exists anywhere):
+2. **Container scanning** (only if a `Dockerfile` or container image exists):
    - `trivy fs <detected app/source directory>`
 
-3. SAST (only if source code exists — language auto-detected by semgrep):
+3. **SAST** (only if source code exists — language auto-detected by semgrep):
    - `semgrep scan --config auto <detected app/source directory>`
 
-4. Infrastructure review (only if Terraform/Kubernetes/CloudFormation files exist):
+4. **Infrastructure review** (only if Terraform/Kubernetes/CloudFormation files exist):
    - Check for public-facing resources, missing encryption, or wildcard IAM
      permissions in whatever IaC folders you found in Step 0.
 
-5. Dependency review (only if the repo has a GitHub remote):
+5. **Dependency audit and upgrade** (only if dependency manifest files exist):
+   - Detect the package manager from Step 0:
+     - Python: `pip-audit` or `safety check` against `requirements.txt` / `Pipfile.lock`
+     - Node.js: `npm audit` against `package-lock.json`
+     - Go: `govulncheck ./...`
+     - Java: check `pom.xml` / `build.gradle` dependency versions against known CVEs
+     - Other: note as a coverage gap
    - Use `gh` to confirm Dependabot / dependency review is enabled on pull
      requests, or record it as a coverage gap.
+   - **Upgrade loop** (when vulnerable or critically outdated packages are found):
+     a. Create a new branch for the upgrade.
+     b. Update the vulnerable package(s) to the nearest safe version
+        (prefer minor/patch bumps over major to reduce breakage risk).
+     c. Run the repo's existing test suite (detected from CI config,
+        `package.json` scripts, `Makefile`, `pytest`, etc.).
+     d. If tests **pass**: open a PR titled
+        `security: upgrade <package> to fix <CVE/advisory>` with a summary of
+        what was vulnerable and what changed.
+     e. If tests **fail**: attempt to fix the compatibility issue (up to 2
+        attempts). If still failing, open the PR anyway but mark it as
+        draft with the failure details documented, so the developer can
+        investigate.
+     f. Never auto-merge. Never upgrade everything at once — one PR per
+        package or per logical group of related packages.
 
-6. CI/CD workflow review (only if `.github/workflows/` exists):
+6. **CI/CD workflow review** (only if `.github/workflows/` exists):
    - Check for overly broad permissions, unpinned action versions, and secrets
      exposed in logs.
 
@@ -77,11 +100,11 @@ findings by **severity** (Critical, High, Medium, Low), and output a
 - If `CODEOWNERS` exists, use it as the source of truth for owners.
 - If it doesn't exist, fall back to these generic defaults based on what you
   discovered in Step 0:
-  - Application/source code directory -> @backend-team
-  - Frontend/UI directory (if separate) -> @web-platform
-  - `.github/workflows/**` -> @platform-eng
-  - Any Terraform/Kubernetes/IaC directory -> @infra-oncall
-  - Otherwise -> @security-champions
+  - Application/source code directory → @backend-team
+  - Frontend/UI directory (if separate) → @web-platform
+  - `.github/workflows/**` → @platform-eng
+  - Any Terraform/Kubernetes/IaC directory → @infra-oncall
+  - Otherwise → @security-champions
 
 ### Output format (copy/paste into a pull request description)
 
@@ -91,17 +114,18 @@ Produce a single Markdown report with:
 - Sections for **Critical**, **High**, **Medium**, **Low**
 - Each finding formatted as a checklist item:
 
-Example item format:
-
+```markdown
 - [ ] **[H-1] <short title> (<file or module>)**
   - **Area:** `<path or component>`
   - **Owner:** `@team-or-user`
   - **What to do next:** `<1–3 concrete steps>`
-  - **Command(s):** `<what you ran or what to run to verify>`
+  - **Command(s):** `<what you ran or what to verify>`
+```
 
 ### Final step
 
 At the end, add a "Next steps" section with:
 
-- who should open the follow-up pull requests
-- suggested sequencing (Critical within 24 hours, High within 7 days, etc.)
+- Who should open the follow-up pull requests
+- Suggested sequencing (Critical within 24 hours, High within 7 days,
+  Medium within 30 days, Low as backlog)

@@ -61,7 +61,8 @@ documents an exception (e.g. in a `policy/` README or inline comment):
    - `terraform fmt -check`
    - `terraform init -backend=false`
    - `terraform validate`
-   - `terraform plan -out tfplan` (only if a valid backend/credentials are available; otherwise note as a coverage gap)
+   - `terraform plan -out tfplan` (only if a valid backend/credentials are
+     available; otherwise note as a coverage gap)
    - `terraform show -json tfplan > tfplan.json`
 
 2. **Policy evaluation** (only if a `policy/` folder exists):
