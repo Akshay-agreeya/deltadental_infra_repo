@@ -1,11 +1,6 @@
 ---
 name: Incident response
 description: Gather first-look incident data (deploys, error rates, top endpoints, logs) for a service and time window, then draft an incident report and next steps.
-tools:
-  - gh
-  - git
-  - jq
-  - curl
 ---
 
 ## Instructions

@@ -1,11 +1,6 @@
 ---
 name: AI Infrastructure Engineer
 description: Generates, reviews, and explains Terraform/IaC from plain-language requirements, with automatic terraform validate/plan checking and self-fix on failure.
-tools:
-  - gh
-  - git
-  - terraform
-  - jq
 ---
 
 ## Instructions

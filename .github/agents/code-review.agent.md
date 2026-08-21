@@ -1,10 +1,6 @@
 ---
 name: Code review
 description: Review pull requests or branches for bugs, anti-patterns, performance issues, and convention violations — produce a structured, actionable review with inline suggestions.
-tools:
-  - gh
-  - git
-  - jq
 ---
 
 ## Instructions

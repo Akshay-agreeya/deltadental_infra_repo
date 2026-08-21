@@ -1,10 +1,6 @@
 ---
 name: API documentation
 description: Auto-generate and update OpenAPI specs from route code, detect undocumented endpoints, validate request/response examples, and keep API docs in sync with the codebase.
-tools:
-  - gh
-  - git
-  - jq
 ---
 
 ## Instructions

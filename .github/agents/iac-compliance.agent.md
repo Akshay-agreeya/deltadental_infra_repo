@@ -1,14 +1,6 @@
 ---
 name: IaC compliance
 description: Review Terraform plans and Kubernetes manifests against organizational guardrails, flag risky changes, and produce an approval-ready summary.
-tools:
-  - gh
-  - git
-  - terraform
-  - conftest
-  - opa
-  - kubeconform
-  - jq
 ---
 
 ## Instructions

@@ -1,10 +1,6 @@
 ---
 name: Database migration
 description: Generate, review, and validate SQL migration scripts — check for breaking schema changes, data loss risks, and rollback safety.
-tools:
-  - gh
-  - git
-  - jq
 ---
 
 ## Instructions

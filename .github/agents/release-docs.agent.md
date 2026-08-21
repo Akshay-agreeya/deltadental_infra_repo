@@ -1,9 +1,6 @@
 ---
 name: Release docs
 description: Draft release notes from merged PRs since the previous release, update CHANGELOG.md, and output a release checklist (tests, migrations, rollout/rollback).
-tools:
-  - gh
-  - git
 ---
 
 ## Instructions

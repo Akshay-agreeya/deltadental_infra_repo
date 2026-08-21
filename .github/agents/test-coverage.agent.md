@@ -1,10 +1,6 @@
 ---
 name: Test coverage
 description: Find untested code paths, generate missing unit and integration tests, run them, and open a PR with the new test files.
-tools:
-  - gh
-  - git
-  - jq
 ---
 
 ## Instructions

@@ -1,15 +1,6 @@
 ---
 name: Security audit
 description: Run standard security checks across any repository, find and upgrade vulnerable/outdated dependencies, and produce a PR-ready checklist grouped by severity.
-tools:
-  - gh
-  - git
-  - semgrep
-  - trivy
-  - gitleaks
-  - jq
-  - npm
-  - pip
 ---
 
 ## Instructions

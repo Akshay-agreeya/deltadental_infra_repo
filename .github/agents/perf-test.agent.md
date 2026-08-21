@@ -1,11 +1,6 @@
 ---
 name: Performance testing
 description: Write load test scripts, run them against API endpoints, analyze results for bottlenecks, and produce a performance report with optimization recommendations.
-tools:
-  - gh
-  - git
-  - jq
-  - curl
 ---
 
 ## Instructions
