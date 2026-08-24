@@ -38,8 +38,22 @@ servers_dbs = {
   }
 }
 
-
-
+dev_key_vaults = {
+  key_vault = {
+    key_vault_name                = "devtodokvwestus2"
+    resource_group_name           = "psddg"
+    location                      = "westus2"
+    sku_name                      = "standard"
+    soft_delete_retention_days    = 90
+    purge_protection_enabled      = true
+    public_network_access_enabled = true
+    tags = {
+      environment = "development"
+      project     = "todoapp"
+      managed_by  = "terraform"
+    }
+  }
+}
 
 
 
