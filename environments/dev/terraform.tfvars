@@ -7,6 +7,11 @@ dev_acrs = {
     resource_group_name = "psddg"
     location            = "westus 2"
     sku                 = "Standard"
+    tags = {
+      environment = "development"
+      project     = "todoapp"
+      managed_by  = "terraform"
+    }
   }
 }
 
@@ -21,6 +26,7 @@ dev_aks = {
     tags = {
       environment = "development"
       project     = "todoapp"
+      managed_by  = "terraform"
     }
   }
 
@@ -35,6 +41,11 @@ servers_dbs = {
     administrator_login_password   = "P@ssw01rd@123"
     allow_access_to_azure_services = true
     dbs                            = ["todoappdb"]
+    tags = {
+      environment = "development"
+      project     = "todoapp"
+      managed_by  = "terraform"
+    }
   }
 }
 
