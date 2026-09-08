@@ -19,5 +19,7 @@ module "database" {
   servers_dbs = var.servers_dbs
 }
 
-
-
+module "key_vault" {
+  source     = "../../modules/azurerm_key_vault"
+  key_vaults = var.dev_key_vaults
+}
