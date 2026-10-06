@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: Delta Dental Task Management API
+  version: 1.0.0
+  description: |
+    API for initializing the task database and creating tasks. Tasks are
+    persisted in Microsoft SQL Server. The service does not currently define
+    authentication.
+servers:
+  - url: http://localhost:8000
+    description: Local development
+tags:
+  - name: System
+    description: Service and database initialization
+  - name: Tasks
+    description: Task creation
+paths:
+  /:
+    get:
+      tags:
+        - System
+      summary: Initialize the tasks table
+      description: |
+        Creates the Tasks table. Returns a readiness message if the table is
+        created or already exists; database errors are returned as an error
+        message with HTTP 200.
+      operationId: initializeTasks
+      responses:
+        '200':
+          description: Initialization result
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                ready:
+                  summary: Table created or already exists
+                  value: Add-Tasks API Ready.
+                error:
+                  summary: Initialization failed
+                  value: Error. Please check Logs.
+  /tasks:
+    post:
+      tags:
+        - Tasks
+      summary: Create a task
+      description: Creates a task and returns the submitted task fields.
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInput'
+            example:
+              title: Review deployment logs
+              description: Check the latest deployment for warnings.
+      responses:
+        '200':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                title: Review deployment logs
+                description: Check the latest deployment for warnings.
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          description: Database or other unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Internal Server Error
+components:
+  schemas:
+    TaskInput:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          description: Task title.
+        description:
+          type: string
+          description: Task description.
+    Task:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          description: Task title.
+        description:
+          type: string
+          description: Task description.
+    ValidationError:
+      type: object
+      description: FastAPI/Pydantic request validation error.
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            required:
+              - loc
+              - msg
+              - type
+            properties:
+              loc:
+                type: array
+                items:
+                  oneOf:
+                    - type: string
+                    - type: integer
+              msg:
+                type: string
+              type:
+                type: string
+  responses:
+    ValidationError:
+      description: Request body failed validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+          example:
+            detail:
+              - loc:
+                  - body
+                  - title
+                msg: Field required
+                type: missing
