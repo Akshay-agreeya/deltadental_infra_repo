@@ -5,8 +5,7 @@ resource "azurerm_container_registry" "acr" {
     location = each.value.location
     sku = each.value.sku
     admin_enabled = false
+    tags = each.value.tags
 }
-
-
 
 
